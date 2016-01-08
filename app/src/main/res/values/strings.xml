@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">IRC Client +</string>
+    <string name="title_activity_testing">Testing</string>
+    <string name="action_settings">Settings</string>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".connections">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test IRC class"
+        android:id="@+id/testBtn"
+        android:onClick="TestIRC"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions|textMultiLine"
+        android:ems="10"
+        android:id="@+id/Output"
+        android:textIsSelectable="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:editable="false"
+        android:textSize="12sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/sendText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Test"
+        android:id="@+id/endTest"
+        android:enabled="false"
+        android:onClick="EndTest"
+        android:layout_alignTop="@+id/testBtn"
+        android:layout_toRightOf="@+id/testBtn"
+        android:layout_toEndOf="@+id/testBtn" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendText"
+        android:layout_below="@+id/testBtn"
+        android:layout_alignLeft="@+id/testBtn"
+        android:layout_alignStart="@+id/testBtn"
+        android:layout_alignRight="@+id/Output"
+        android:layout_alignEnd="@+id/Output"
+        android:inputType="textNoSuggestions|text" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:id="@+id/sendBtn"
+        android:onClick="SendInp"
+        android:layout_alignTop="@+id/endTest"
+        android:layout_toRightOf="@+id/endTest"
+        android:layout_toEndOf="@+id/endTest" />
+
+</RelativeLayout>
