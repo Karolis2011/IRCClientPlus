@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/small_activity_margin"
-    android:paddingTop="@dimen/small_activity_margin"
-    android:paddingBottom="@dimen/small_activity_margin"
+    android:layout_height="match_parent"
     tools:context="tk.kar_programing.ircclient.channelView">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
+    <tk.kar_programing.ircclient.CustomViews.ScrollViewExt
+        android:overScrollMode="ifContentScrolls"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/outputScroller"
+        android:fillViewport="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout">
+        android:layout_above="@+id/inputBox">
 
-    </LinearLayout>
+        <TextView
+            android:layout_marginTop="@dimen/text_output_margin"
+            android:layout_marginLeft="@dimen/text_output_margin"
+            android:layout_marginBottom="@dimen/text_output_margin"
+            android:layout_marginRight="@dimen/text_output_margin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chanOutput"
+            android:text=""
+            android:autoLink="web"
+            android:gravity="bottom" />
+    </tk.kar_programing.ircclient.CustomViews.ScrollViewExt>
 
     <EditText
         android:layout_width="fill_parent"
@@ -24,34 +35,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:layout_alignRight="@+id/linearLayout"
-        android:layout_alignEnd="@+id/linearLayout"
         android:textSize="18sp"
         android:layout_alignParentEnd="true"
         android:inputType="text"
-        android:imeOptions="actionSend" />
-
-    <ScrollView
-        android:overScrollMode="ifContentScrolls"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/outputScroller"
-        android:layout_above="@+id/inputBox"
-        android:layout_alignRight="@+id/linearLayout"
-        android:layout_alignEnd="@+id/linearLayout"
-        android:layout_alignLeft="@+id/linearLayout"
-        android:layout_alignStart="@+id/linearLayout"
-        android:layout_below="@+id/linearLayout"
-        android:fillViewport="true">
-
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/chanOutput"
-            android:text=""
-            android:autoLink="web"
-            android:gravity="bottom" />
-    </ScrollView>
+        android:imeOptions="actionSend"
+        android:visibility="visible" />
 
 </RelativeLayout>

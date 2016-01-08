@@ -1,34 +1,46 @@
 package tk.kar_programing.ircclient;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import tk.kar_programing.ircclient.CustomViews.Interfaces.ScrollViewListener;
+import tk.kar_programing.ircclient.CustomViews.ScrollViewExt;
 import tk.kar_programing.ircclient.core.ClientManager;
-import tk.kar_programing.ircclient.core.IRC.IRCPacket;
 import tk.kar_programing.ircclient.core.IRC.ManagedIRCClient;
-import tk.kar_programing.ircclient.core.IRC.utils.IRCCallBackRunnable;
 import tk.kar_programing.ircclient.exceptions.GeneralException;
 
 public class channelView extends AppCompatActivity {
+    private Timer timer = new Timer();
+    private boolean enabledTextHiding = true;
+    private boolean isHiddenTextBox = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel_view);
         EditText inputText = (EditText) findViewById(R.id.inputBox);
-        //Let's check if there is already
+        //Pre hide text box
+
+        //Let's check if there is already a client
         ManagedIRCClient ircClient = ClientManager.getInstance().GetClientByName("Main");
-        if(ircClient == null){
+        if (ircClient == null) {
             //Let's create new client
             ircClient = ClientManager.getInstance().CreateTestClient("Main");
-            try{
+            try {
                 ircClient.Connect();
-            } catch (GeneralException e){
+            } catch (GeneralException e) {
                 e.printStackTrace();
             }
 
@@ -37,7 +49,7 @@ public class channelView extends AppCompatActivity {
                 TextView v = (TextView) findViewById(R.id.chanOutput);
                 Spanned sp = Html.fromHtml(ircClient.ChannelBuffers.get("General"));
                 v.setText(sp);
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
@@ -72,30 +84,59 @@ public class channelView extends AppCompatActivity {
                 TextView v = (TextView) findViewById(R.id.chanOutput);
                 Spanned sp = Html.fromHtml(client.ChannelBuffers.get("General"));
                 v.setText(sp);
-        }
+            }
         });
-        /*
-        Old Code:
-        ClientManager.getInstance().Init();
-        TextView v = (TextView) findViewById(R.id.chanOutput);
-        Spanned sp = Html.fromHtml(ClientManager.getInstance().htmlBuffer);
-        v.setText(sp);
 
-        if(savedInstanceState == null){
-            //Let's add packet handler
-            ClientManager.getInstance().ircClient.addPacketCallback(new IRCCallBackRunnable() {
-                @Override
-                public void run(IRCPacket ircPacket) {
-                    TextView v = (TextView) findViewById(R.id.chanOutput);
-                    ClientManager.getInstance().htmlBuffer += ircPacket.GetData() + "<br/>";
-                    Spanned sp = Html.fromHtml(ClientManager.getInstance().htmlBuffer);
-                    //v.setText(ircPacket.GetData());
-                    v.setText(sp);
+        ScrollViewExt scrollv = (ScrollViewExt) findViewById(R.id.outputScroller);
+        scrollv.setScrollViewListener(new ScrollViewListener() {
+            @Override
+            public void onScrollChanged(ScrollViewExt scrollView, int x, int y, int oldx, int oldy) {
+                View view = scrollView.getChildAt(scrollView.getChildCount() - 1);
+                int diff = (view.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
+                int diffy = y - oldy;
+                if (diff <= 15 && isHiddenTextBox) {
+                    showTextBox();
+                    isHiddenTextBox = false;
+                    enabledTextHiding = false;
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            enabledTextHiding = true;
+                        }
+                    }, 1000);
+                } else {
+                    if (diffy < -10 && enabledTextHiding && !isHiddenTextBox) {
+                        hideTextBox();
+                        isHiddenTextBox = true;
+                    }
                 }
-            });
-        }
-        */
+            }
+        });
+    }
 
+    protected void hideTextBox() {
+        final EditText inputText = (EditText) findViewById(R.id.inputBox);
+//        inputText.setVisibility(View.GONE);
+        inputText.animate()
+                .translationY(inputText.getHeight())
+                .alpha(0.0f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        if(isHiddenTextBox){
+                            inputText.setVisibility(View.GONE);
+                        }
+                    }
+                });
+    }
+
+    protected void showTextBox() {
+        EditText inputText = (EditText) findViewById(R.id.inputBox);
+        inputText.setVisibility(View.VISIBLE);
+        inputText.animate()
+                .translationY(0)
+                .alpha(1.0f);
     }
 
 }
