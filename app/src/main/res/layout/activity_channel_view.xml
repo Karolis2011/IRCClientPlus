@@ -25,6 +25,7 @@
             android:id="@+id/chanOutput"
             android:text=""
             android:autoLink="web"
+            android:textIsSelectable="true"
             android:gravity="bottom" />
     </tk.kar_programing.ircclient.CustomViews.ScrollViewExt>
 
@@ -36,6 +37,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:textSize="18sp"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:inputType="text"
         android:imeOptions="actionSend"
