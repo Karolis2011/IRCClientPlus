@@ -4,43 +4,8 @@
     android:layout_height="match_parent"
     tools:context="tk.kar_programing.ircclient.channelView">
 
-    <tk.kar_programing.ircclient.CustomViews.ScrollViewExt
-        android:overScrollMode="ifContentScrolls"
-        android:layout_width="fill_parent"
+    <android.support.v4.view.ViewPager
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/outputScroller"
-        android:fillViewport="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/inputBox">
-
-        <TextView
-            android:layout_marginTop="@dimen/text_output_margin"
-            android:layout_marginLeft="@dimen/text_output_margin"
-            android:layout_marginBottom="@dimen/text_output_margin"
-            android:layout_marginRight="@dimen/text_output_margin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/chanOutput"
-            android:text=""
-            android:autoLink="web"
-            android:textIsSelectable="true"
-            android:gravity="bottom" />
-    </tk.kar_programing.ircclient.CustomViews.ScrollViewExt>
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:id="@+id/inputBox"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:textSize="18sp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:inputType="text"
-        android:imeOptions="actionSend"
-        android:visibility="visible" />
-
+        android:id="@+id/channelPager" />
 </RelativeLayout>

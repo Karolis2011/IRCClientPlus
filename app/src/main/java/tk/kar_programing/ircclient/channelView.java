@@ -2,6 +2,11 @@ package tk.kar_programing.ircclient;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import layout.channel_buffer;
 import tk.kar_programing.ircclient.CustomViews.Interfaces.ScrollViewListener;
 import tk.kar_programing.ircclient.CustomViews.ScrollViewExt;
 import tk.kar_programing.ircclient.core.ClientManager;
@@ -23,14 +29,17 @@ import tk.kar_programing.ircclient.core.IRC.ManagedIRCClient;
 import tk.kar_programing.ircclient.exceptions.GeneralException;
 
 public class channelView extends AppCompatActivity {
-    private Timer timer = new Timer();
-    private boolean enabledTextHiding = true;
-    private boolean isHiddenTextBox = true;
+    private ViewPager channelPager;
+    private PagerAdapter channelPagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel_view);
-        EditText inputText = (EditText) findViewById(R.id.inputBox);
+
+        channelPager = (ViewPager) findViewById(R.id.channelPager);
+        channelPagerAdapter = new ChannelPagerAdapter(getSupportFragmentManager());
+        channelPager.setAdapter(channelPagerAdapter);
+        /*EditText inputText = (EditText) findViewById(R.id.inputBox);
         //Pre hide text box
 
         //Let's check if there is already a client
@@ -111,32 +120,23 @@ public class channelView extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
     }
 
-    protected void hideTextBox() {
-        final EditText inputText = (EditText) findViewById(R.id.inputBox);
-//        inputText.setVisibility(View.GONE);
-        inputText.animate()
-                .translationY(inputText.getHeight())
-                .alpha(0.0f)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        if(isHiddenTextBox){
-                            inputText.setVisibility(View.GONE);
-                        }
-                    }
-                });
-    }
 
-    protected void showTextBox() {
-        EditText inputText = (EditText) findViewById(R.id.inputBox);
-        inputText.setVisibility(View.VISIBLE);
-        inputText.animate()
-                .translationY(0)
-                .alpha(1.0f);
-    }
+    private class ChannelPagerAdapter extends FragmentStatePagerAdapter {
+        public ChannelPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
 
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            return new channel_buffer();
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    }
 }
