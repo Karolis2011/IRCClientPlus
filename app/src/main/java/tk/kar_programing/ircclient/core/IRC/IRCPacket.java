@@ -59,7 +59,7 @@ public class IRCPacket {
         return this.target;
     }
 
-    public String GetSouce(){
+    public String GetSource(){
         return this.source;
     }
 

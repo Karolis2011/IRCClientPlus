@@ -96,7 +96,7 @@ public class ManagedIRCClient {
 
         }
         if (ircPacket.GetType() != IRCPacket.Type.RAW){
-            buffer += "<b>" + ircPacket.GetSouce() + "</b> ";
+            buffer += "<b>" + ircPacket.GetSource() + "</b> ";
         }
         buffer += ircPacket.GetData();
         buffer += "<br>";
