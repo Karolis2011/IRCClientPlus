@@ -9,7 +9,7 @@ import tk.kar_programing.ircclient.exceptions.GeneralException;
 
 public class NetworkDetails {
     public String networkName;
-    public List<ServerDetails> serverDetailsList;
+    public final List<ServerDetails> serverDetailsList;
     public UserDetails userDetails;
 
     public NetworkDetails(){

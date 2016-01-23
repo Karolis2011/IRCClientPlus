@@ -10,8 +10,8 @@ import tk.kar_programing.ircclient.core.IRC.Data.ServerDetails;
 import tk.kar_programing.ircclient.exceptions.GeneralException;
 
 public class ClientManager {
-    public static ClientManager instance;
-    private Map<String, ManagedIRCClient> ircClientMap;
+    private static ClientManager instance;
+    private final Map<String, ManagedIRCClient> ircClientMap;
 
     public static ClientManager getInstance(){
         if(instance == null){
@@ -26,8 +26,7 @@ public class ClientManager {
 
     public ManagedIRCClient NewClient(String name, NetworkDetails networkDetails) throws GeneralException {
         if(ircClientMap.containsKey(name)){
-            GeneralException ex = new GeneralException("There is already a client with same name");
-            throw ex;
+            throw new GeneralException("There is already a client with same name");
         }
         ManagedIRCClient tmp = new ManagedIRCClient();
         tmp.name = name;
@@ -38,7 +37,7 @@ public class ClientManager {
 
     public ManagedIRCClient CreateTestClient(String key) {
         NetworkDetails nd =  new NetworkDetails();
-        UserDetails ud = new UserDetails("Karol|s", "Karolis", "Karolis");
+        UserDetails ud = new UserDetails("IRCCPTester", "IRCCPTester", "IRCCPTester");
         ServerDetails sd = new ServerDetails("Circe", "circe.sorcery.net", 6665);
         nd.serverDetailsList.add(sd);
         nd.userDetails = ud;
@@ -55,10 +54,5 @@ public class ClientManager {
         return ircClientMap.get(name);
     }
 
-    public void Init() {
-        //TODO: Add proper init
-
-
-    }
 
 }

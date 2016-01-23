@@ -16,7 +16,7 @@ import tk.kar_programing.ircclient.core.IRC.utils.IRCCallBackRunnable;
 
 public class IRCClient {
     public final RawIRCClient ircCore;
-    private List<IRCCallBackRunnable> packetCallback;
+    private final List<IRCCallBackRunnable> packetCallback;
     private NetworkDetails networkDetails;
 
     public IRCClient(NetworkDetails networkDetails, ServerDetails serverDetails){

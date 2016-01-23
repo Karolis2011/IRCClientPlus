@@ -16,13 +16,14 @@ import tk.kar_programing.ircclient.exceptions.GeneralException;
 public class ManagedIRCClient {
     public String name;
     public IRCClient unmanagedIRCCLient;
-    public Map<String, String> ChannelBuffers;
-    public Map<String, Integer> ChannelBufferUpdateTimeouts;
+    public final Map<String, String> ChannelBuffers;
+    private final Map<String, Integer> ChannelBufferUpdateTimeouts;
     public NetworkDetails designatedNetwork;
-    private List<BufferUpdateRunnable> updatehandles;
+    private final List<BufferUpdateRunnable> updatehandles;
+    private final List<BufferUpdateRunnable> newbuffercalbacks;
     private Thread processingThread;
     private final int UpdateDelay = 50; //In ms
-    private Timer timer;
+    private final Timer timer;
 
     public ManagedIRCClient () {
         timer = new Timer("Update Count Down");
@@ -33,6 +34,7 @@ public class ManagedIRCClient {
             }
         }, 0, 10);
         updatehandles = new ArrayList<>();
+        newbuffercalbacks = new ArrayList<>();
         ChannelBuffers = new android.support.v4.util.ArrayMap<>();
         ChannelBufferUpdateTimeouts = new android.support.v4.util.ArrayMap<>();
     }
@@ -41,14 +43,17 @@ public class ManagedIRCClient {
         for (Map.Entry<String, Integer> ent : ChannelBufferUpdateTimeouts.entrySet()) {
             Integer val = ent.getValue();
             String key = ent.getKey();
-            if (val <= 0){
-                for (BufferUpdateRunnable callback : updatehandles) {
-                    callback.run(key);
+            if(key != null && val != null){
+                if (val <= 0){
+                    for (BufferUpdateRunnable callback : updatehandles) {
+                        callback.run(key);
+                    }
+                    ChannelBufferUpdateTimeouts.remove(key);
+                } else {
+                    ChannelBufferUpdateTimeouts.put(key, val - 10);
                 }
-                ChannelBufferUpdateTimeouts.remove(key);
-            } else {
-                ChannelBufferUpdateTimeouts.put(key, val - 10);
             }
+
         }
     }
 
@@ -83,17 +88,20 @@ public class ManagedIRCClient {
         });
     }
 
-    public void SortAndHandlePacks(IRCPacket ircPacket) {
+    private void SortAndHandlePacks(IRCPacket ircPacket) {
         String target = ircPacket.GetTarget();
         if(target == null){
-            target = "General";
+            target = "!General";
         }
-        target = "General"; // Just for test sakes TODO: Remove this line when proper chanel showing will be present
+        //target = "General"; // Just for test sakes TODO: Remove this line when proper chanel showing will be present
         String buffer = ChannelBuffers.get(target);
         if(buffer == null){
-            //Do buffer init stuff, like adding any special styles or scripts
-            buffer = "";
-
+            //Do buffer init stuff, like calling new buffer callbacks
+            buffer = "<i>Buffer with <b>" + target +"</b> opened</i><br>";
+            ChannelBuffers.put(target, buffer); //We have to but new buffer with data NOW!
+            for (BufferUpdateRunnable call: newbuffercalbacks) {
+                call.run(target);
+            }
         }
         if (ircPacket.GetType() != IRCPacket.Type.RAW){
             buffer += "<b>" + ircPacket.GetSource() + "</b> ";
@@ -107,19 +115,21 @@ public class ManagedIRCClient {
 
     public void ClearHandles(){
         updatehandles.clear();
+        newbuffercalbacks.clear();
     }
 
     public void AddUpdateHandle(BufferUpdateRunnable callback){
         updatehandles.add(callback);
     }
 
-    public List<String> GetAvavibleChannels(){
+    public void AddNewBufferCallback(BufferUpdateRunnable callback) {
+        newbuffercalbacks.add(callback);
+    }
+
+    public List<String> GetAvailableChannels(){
         List<String> tmp = new ArrayList<>();
         tmp.addAll(ChannelBuffers.keySet());
         return tmp;
     }
 
-    public void ClearChannelBuffer(String channelName){
-        //TODO: Implement
-    }
 }

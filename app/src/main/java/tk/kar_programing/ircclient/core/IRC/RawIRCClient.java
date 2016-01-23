@@ -1,6 +1,5 @@
 package tk.kar_programing.ircclient.core.IRC;
 
-import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -10,7 +9,6 @@ import java.io.*;
 import java.net.*;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import javax.net.ssl.*;
 
@@ -18,7 +16,8 @@ import tk.kar_programing.ircclient.BuildConfig;
 import tk.kar_programing.ircclient.core.IRC.SSL.IgnoreSSLTrustManager;
 
 /*
-RawIRCClient is a class ofr handling basic IRC protocol
+RawIRCClient is a class for handling basic IRC protocol,
+ most of this class methods must be executed outside main thread
  */
 public class RawIRCClient {
 

@@ -1,36 +1,25 @@
 package tk.kar_programing.ircclient;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-import layout.channel_buffer;
-import tk.kar_programing.ircclient.CustomViews.Interfaces.ScrollViewListener;
-import tk.kar_programing.ircclient.CustomViews.ScrollViewExt;
+import layout.channelBufferFragment;
 import tk.kar_programing.ircclient.core.ClientManager;
 import tk.kar_programing.ircclient.core.IRC.ManagedIRCClient;
+import tk.kar_programing.ircclient.core.IRC.utils.BufferUpdateRunnable;
 import tk.kar_programing.ircclient.exceptions.GeneralException;
 
 public class channelView extends AppCompatActivity {
     private ViewPager channelPager;
-    private PagerAdapter channelPagerAdapter;
+    private ChannelPagerAdapter channelPagerAdapter;
+    private ManagedIRCClient ircClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +28,28 @@ public class channelView extends AppCompatActivity {
         channelPager = (ViewPager) findViewById(R.id.channelPager);
         channelPagerAdapter = new ChannelPagerAdapter(getSupportFragmentManager());
         channelPager.setAdapter(channelPagerAdapter);
+        ircClient = ClientManager.getInstance().GetClientByName("Main");
+        if (ircClient == null) {
+            //Let's create new client
+            ircClient = ClientManager.getInstance().CreateTestClient("Main");
+            try {
+                ircClient.Connect();
+            } catch (GeneralException e) {
+                e.printStackTrace();
+            }
+        } else {
+            ircClient.ClearHandles();
+            for(String name: ircClient.GetAvailableChannels()){
+                channelPagerAdapter.addChannelBuffer(ircClient, name);
+            }
+        }
+        ircClient.AddNewBufferCallback(new BufferUpdateRunnable() {
+            @Override
+            public void run(String bufferName) {
+                channelPagerAdapter.addChannelBuffer(ircClient, bufferName);
+            }
+        });
+
         /*EditText inputText = (EditText) findViewById(R.id.inputBox);
         //Pre hide text box
 
@@ -125,18 +136,55 @@ public class channelView extends AppCompatActivity {
 
 
     private class ChannelPagerAdapter extends FragmentStatePagerAdapter {
+        private final ArrayList<channelBufferFragment> fragments = new ArrayList<>();
         public ChannelPagerAdapter(FragmentManager fm){
             super(fm);
         }
 
-        @Override
-        public android.support.v4.app.Fragment getItem(int position) {
-            return new channel_buffer();
+        public void addChannelBuffer(ManagedIRCClient ircClient, String bufferName){
+            channelBufferFragment bufferFragment = new channelBufferFragment();
+            if(bufferFragment.init(ircClient, bufferName)){
+                fragments.add(bufferFragment);
+                //Sort();
+            }
+            notifyDataSetChanged();
+        }
+
+        private void Sort(){
+            Collections.sort(fragments, new Comparator<channelBufferFragment>() {
+                @Override
+                public int compare(channelBufferFragment lhs, channelBufferFragment rhs) {
+                    return lhs.getBufferName().compareToIgnoreCase(rhs.getBufferName());
+                }
+            });
         }
 
         @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        public void removeBuffer(ViewPager myPager, String bufferName) {
+            //myPager.setAdapter(null);
+            for(channelBufferFragment cbf : fragments){
+                if (cbf.getBufferName().equals(bufferName)){
+                    fragments.remove(cbf);
+                }
+            }
+            notifyDataSetChanged();
+            //myPager.setAdapter(this);
+        }
+
+        public void addHandles(){
+            for(channelBufferFragment cbf : fragments){
+                cbf.addHandle();
+            }
+        }
+
+
+        @Override
         public int getCount() {
-            return 3;
+            return fragments.size();
         }
     }
 }
