@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="layout.channelBufferFragment">
 
-    <tk.kar_programing.ircclient.CustomViews.ScrollViewExt
+    <com.karolis_apps.irccp.CustomViews.ScrollViewExt
         android:overScrollMode="ifContentScrolls"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:autoLink="web"
             android:textIsSelectable="true"
             android:gravity="bottom" />
-    </tk.kar_programing.ircclient.CustomViews.ScrollViewExt>
+    </com.karolis_apps.irccp.CustomViews.ScrollViewExt>
 
     <EditText
         android:layout_width="fill_parent"

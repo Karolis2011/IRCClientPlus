@@ -1,4 +1,4 @@
-package tk.kar_programing.ircclient;
+package com.karolis_apps.irccp;
 
 import org.junit.Test;
 

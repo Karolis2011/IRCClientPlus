@@ -21,12 +21,12 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import tk.kar_programing.ircclient.CustomViews.Interfaces.ScrollViewListener;
-import tk.kar_programing.ircclient.CustomViews.ScrollViewExt;
-import tk.kar_programing.ircclient.R;
-import tk.kar_programing.ircclient.core.ClientManager;
-import tk.kar_programing.ircclient.core.IRC.ManagedIRCClient;
-import tk.kar_programing.ircclient.core.IRC.utils.BufferUpdateRunnable;
+import com.karolis_apps.irccp.CustomViews.Interfaces.ScrollViewListener;
+import com.karolis_apps.irccp.CustomViews.ScrollViewExt;
+import com.karolis_apps.irccp.R;
+import com.karolis_apps.irccp.core.ClientManager;
+import com.karolis_apps.irccp.core.IRC.ManagedIRCClient;
+import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +34,7 @@ import tk.kar_programing.ircclient.core.IRC.utils.BufferUpdateRunnable;
 public class channelBufferFragment extends Fragment {
     private boolean enabledTextHiding = true;
     private final Timer timer = new Timer();
+    private final Timer generalTimer = new Timer();
     private boolean isHiddenTextBox = false;
     private String myClientName;
     private String myBuffer;
@@ -78,7 +79,7 @@ public class channelBufferFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_channel_buffer, container, false);
+        rootView = inflater.inflate(R.layout.fragment_channel_buffer, container, false);
 
         ScrollViewExt scrollv = (ScrollViewExt) rootView.findViewById(R.id.outputScroller);
         scrollv.setScrollViewListener(new ScrollViewListener() {
@@ -115,7 +116,7 @@ public class channelBufferFragment extends Fragment {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ClientManager.getInstance().GetClientByName(myClientName).unmanagedIRCCLient.PhraseCommand(vv + "\r\n");
+                            ClientManager.getInstance().GetClientByName(myClientName).PhraseInput(vv + "\r\n", myBuffer);
                         }
                     });
                     t.start();
@@ -128,15 +129,24 @@ public class channelBufferFragment extends Fragment {
         if (savedInstanceState != null){
             myClientName = savedInstanceState.getString("IRCCName");
             myBuffer = savedInstanceState.getString("Buffer");
-            updateBuffer();
         }
         Log.d("UI", "channelBufferFragment created UI, MagicID: " + myClientName + ":" + myBuffer);
         addHandle();
+        updateBuffer();
         return rootView;
     }
 
 
     private void updateBuffer(){
+        if(rootView == null){
+            generalTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    updateBuffer();
+                }
+            }, 100); //Let's wait when our UI will be created, so we could update it
+            return;
+        }
         Handler h = new Handler(Looper.getMainLooper());
         h.post(new Runnable() {
             @Override
