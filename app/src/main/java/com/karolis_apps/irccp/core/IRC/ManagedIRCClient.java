@@ -1,5 +1,6 @@
 package com.karolis_apps.irccp.core.IRC;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.karolis_apps.irccp.BuildConfig;
+import com.karolis_apps.irccp.core.ClientManager;
 import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
 import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
 import com.karolis_apps.irccp.core.IRC.utils.HtmlUtils;
@@ -153,6 +156,19 @@ public class ManagedIRCClient {
                 unmanagedIRCCLient.PhraseCommand("/" + input, invokingBuffer);
             }
         }
+    }
+
+    public void Disconnect(@Nullable String message){
+        try{
+            if(message == null){
+                unmanagedIRCCLient.ircCore.Disconnect("IRCClieantPlus " + BuildConfig.VERSION_NAME);
+            } else {
+                unmanagedIRCCLient.ircCore.Disconnect(message);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        ClientManager.getInstance().DropClient(this.name);
     }
 
 }

@@ -1,6 +1,8 @@
 package com.karolis_apps.irccp;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,9 @@ import java.util.List;
 
 import layout.channelBufferFragment;
 import com.karolis_apps.irccp.core.ClientManager;
+import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
+import com.karolis_apps.irccp.core.IRC.Data.ServerDetails;
+import com.karolis_apps.irccp.core.IRC.Data.UserDetails;
 import com.karolis_apps.irccp.core.IRC.ManagedIRCClient;
 import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
 import com.karolis_apps.irccp.exceptions.GeneralException;
@@ -40,7 +45,30 @@ public class channelView extends AppCompatActivity {
         ircClient = ClientManager.getInstance().GetClientByName("Main");
         if (ircClient == null) {
             //Let's create new client
-            ircClient = ClientManager.getInstance().CreateTestClient("Main");
+            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            NetworkDetails networkDetails = new NetworkDetails();
+            String default_username = getResources().getString(R.string.default_username);
+            String default_nickname = getResources().getString(R.string.default_nickname);
+            String default_realname = getResources().getString(R.string.default_realname);
+            networkDetails.userDetails = new UserDetails(
+                    sharedPref.getString(getString(R.string.nickname), default_nickname),
+                    sharedPref.getString(getString(R.string.username), default_username),
+                    sharedPref.getString(getString(R.string.realname), default_realname)
+            );
+            String default_server = getResources().getString(R.string.default_server);
+            int default_port = getResources().getInteger(R.integer.default_port);
+            boolean default_ssl = getResources().getBoolean(R.bool.default_ssl);
+            networkDetails.serverDetailsList.add(new ServerDetails(
+                    "Server",
+                    sharedPref.getString(getString(R.string.server), default_server),
+                    sharedPref.getInt(getString(R.string.pport), default_port),
+                    sharedPref.getBoolean(getString(R.string.ssl), default_ssl)
+            ));
+            try{
+                ircClient = ClientManager.getInstance().NewClient("Main", networkDetails);
+            } catch (Exception E){
+                //This should never happen
+            }
             try {
                 ircClient.Connect();
             } catch (GeneralException e) {

@@ -54,5 +54,7 @@ public class ClientManager {
         return ircClientMap.get(name);
     }
 
-
+    public void DropClient(String clientName){
+        ircClientMap.remove(clientName);
+    }
 }

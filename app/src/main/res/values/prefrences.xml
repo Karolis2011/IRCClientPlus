@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preference_file_key">com.karolis_apps.irccp.PREFS</string>
+
+    <string name="default_username">IRCCPTester</string>
+    <string name="username">IRCAlphaUsername</string>
+    <string name="default_nickname">IRCCPTester</string>
+    <string name="nickname">IRCAlphaNickname</string>
+    <string name="default_realname">IRCCPTester</string>
+    <string name="realname">IRCAlphaRealname</string>
+
+    <string name="default_server">circe.sorcery.net</string>
+    <integer name="default_port">6665</integer>
+    <bool name="default_ssl">false</bool>
+    <string name="server">IRCAlphaServer</string>
+    <string name="pport">IRCAlphaPort</string>
+    <string name="ssl">IRCAlphaSSL</string>
+
+</resources>
