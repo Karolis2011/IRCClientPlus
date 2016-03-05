@@ -13,34 +13,48 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/inputBox">
+        android:layout_alignParentBottom="true"
+        android:layout_margin="0dp">
 
-        <TextView
-            android:layout_marginTop="@dimen/text_output_margin"
-            android:layout_marginLeft="@dimen/text_output_margin"
-            android:layout_marginBottom="@dimen/text_output_margin"
-            android:layout_marginRight="@dimen/text_output_margin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/chanOutput"
-            android:text=""
-            android:autoLink="web"
-            android:textIsSelectable="true"
-            android:gravity="bottom" />
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_marginTop="@dimen/text_output_margin"
+                android:layout_marginLeft="@dimen/text_output_margin"
+                android:layout_marginBottom="@dimen/text_output_bottom_margin"
+                android:layout_marginRight="@dimen/text_output_margin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:id="@+id/chanOutput"
+                android:text=""
+                android:autoLink="web"
+                android:textIsSelectable="true"
+                android:gravity="bottom"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"/>
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/text_input_height"
+                android:id="@+id/inputBox"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="false"
+                android:textSize="18sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:inputType="text"
+                android:imeOptions="actionSend"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
     </com.karolis_apps.irccp.CustomViews.ScrollViewExt>
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:id="@+id/inputBox"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:textSize="18sp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:inputType="text"
-        android:imeOptions="actionSend"
-        android:visibility="visible" />
 
 </RelativeLayout>

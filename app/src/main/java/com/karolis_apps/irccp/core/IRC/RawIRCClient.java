@@ -1,8 +1,10 @@
 package com.karolis_apps.irccp.core.IRC;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Trace;
 import android.util.Log;
 
 import java.io.*;
@@ -77,8 +79,11 @@ public class RawIRCClient {
 
     public void Run() throws IOException{
         String line;
-        while (((line = inC.readLine()) != null) && this.isConnected) {
+        while (this.isConnected  && ((line = inC.readLine()) != null)) {
             //Uncontrolled responses
+            if(Build.VERSION.SDK_INT >= 18){
+                Trace.beginSection("ircMessageProcessing");
+            }
             if (line.toLowerCase( ).startsWith("ping ")) {
                 rawSend("PONG " + line.substring(5) + "\r\n");
             }
@@ -101,6 +106,9 @@ public class RawIRCClient {
                 }
             }
             Log.d("IRCOut", line);
+            if(Build.VERSION.SDK_INT >= 18){
+                Trace.endSection();
+            }
         }
     }
 

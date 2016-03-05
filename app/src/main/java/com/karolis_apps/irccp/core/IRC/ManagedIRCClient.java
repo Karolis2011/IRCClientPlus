@@ -1,5 +1,7 @@
 package com.karolis_apps.irccp.core.IRC;
 
+import android.os.Build;
+import android.os.Trace;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -47,6 +49,9 @@ public class ManagedIRCClient {
     }
 
     private void UpdateTimerTick(){
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.beginSection("bufferAllUpdate");
+        }
         for (Map.Entry<String, Integer> ent : ChannelBufferUpdateTimeouts.entrySet()) {
             Integer val = ent.getValue();
             String key = ent.getKey();
@@ -61,6 +66,9 @@ public class ManagedIRCClient {
                 }
             }
 
+        }
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.endSection();
         }
     }
 
@@ -96,6 +104,9 @@ public class ManagedIRCClient {
     }
 
     private void SortAndHandlePacks(IRCPacket ircPacket) {
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.beginSection("sortAndHandlePacks");
+        }
         String target = ircPacket.GetTarget();
         if(target == null){
             target = "!General";
@@ -103,7 +114,7 @@ public class ManagedIRCClient {
         if(target.equals(unmanagedIRCCLient.ircCore.currentNick) && (ircPacket.GetType() == IRCPacket.Type.PRIVMSG || ircPacket.GetType() == IRCPacket.Type.NOTICE)) {
             target = IRCName.PhraseName(ircPacket.GetSource()).getProperName();
         }
-        Log.d("SortAndHandlePacks", "Target: " + target + " CurrentNick: " + unmanagedIRCCLient.ircCore.currentNick);
+        //Log.d("SortAndHandlePacks", "Target: " + target + " CurrentNick: " + unmanagedIRCCLient.ircCore.currentNick);
         //target = "General"; // Just for test sakes TODO: Remove this line when proper chanel showing will be present
         String buffer = ChannelBuffers.get(target);
         if(buffer == null){
@@ -122,6 +133,9 @@ public class ManagedIRCClient {
         ChannelBuffers.put(target, buffer);
         //Update invoke to just update stuff
         ChannelBufferUpdateTimeouts.put(target, UpdateDelay);
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.endSection();
+        }
     }
 
     public void ClearHandles(){
@@ -161,7 +175,7 @@ public class ManagedIRCClient {
     public void Disconnect(@Nullable String message){
         try{
             if(message == null){
-                unmanagedIRCCLient.ircCore.Disconnect("IRCClieantPlus " + BuildConfig.VERSION_NAME);
+                unmanagedIRCCLient.ircCore.Disconnect("IRCClientPlus " + BuildConfig.VERSION_NAME);
             } else {
                 unmanagedIRCCLient.ircCore.Disconnect(message);
             }

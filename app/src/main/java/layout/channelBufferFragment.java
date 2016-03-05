@@ -3,9 +3,12 @@ package layout;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Handler;
+import android.os.Trace;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.Spanned;
@@ -32,13 +35,12 @@ import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
  * A simple {@link Fragment} subclass.
  */
 public class channelBufferFragment extends Fragment {
-    private boolean enabledTextHiding = true;
-    private final Timer timer = new Timer();
     private final Timer generalTimer = new Timer();
     private boolean isHiddenTextBox = false;
     private String myClientName;
     private String myBuffer;
     private View rootView;
+    private Context myContext;
 
     public channelBufferFragment() {
         // Required empty public constructor
@@ -53,6 +55,13 @@ public class channelBufferFragment extends Fragment {
         outState.putString("IRCCName", myClientName);
         outState.putString("Buffer", myBuffer);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        myContext = context;
+        Log.d("CBF", "Context attached - " + context.toString());
     }
 
     public boolean init(ManagedIRCClient ircClient, String bufferName){
@@ -89,20 +98,9 @@ public class channelBufferFragment extends Fragment {
                 int diff = (view.getBottom() - (scrollView.getHeight() + scrollView.getScrollY()));
                 int diffy = y - oldy;
                 if (diff <= 15 && isHiddenTextBox) {
-                    showTextBox();
-                    isHiddenTextBox = false;
-                    enabledTextHiding = false;
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            enabledTextHiding = true;
-                        }
-                    }, 1000);
+
                 } else {
-                    if (diffy < -10 && enabledTextHiding && !isHiddenTextBox) {
-                        hideTextBox();
-                        isHiddenTextBox = true;
-                    }
+
                 }
             }
         });
@@ -151,36 +149,13 @@ public class channelBufferFragment extends Fragment {
         h.post(new Runnable() {
             @Override
             public void run() {
+                Trace.beginSection("bufferUpdate");
                 TextView v = (TextView) rootView.findViewById(R.id.chanOutput);
                 Spanned sp = Html.fromHtml(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
                 v.setText(sp);
+                Trace.endSection();
             }
         });
-    }
-
-    private void hideTextBox() {
-        final EditText inputText = (EditText) rootView.findViewById(R.id.inputBox);
-//        inputText.setVisibility(View.GONE);
-        inputText.animate()
-                .translationY(inputText.getHeight())
-                .alpha(0.0f)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        if(isHiddenTextBox){
-                            inputText.setVisibility(View.GONE);
-                        }
-                    }
-                });
-    }
-
-    private void showTextBox() {
-        EditText inputText = (EditText) rootView.findViewById(R.id.inputBox);
-        inputText.setVisibility(View.VISIBLE);
-        inputText.animate()
-                .translationY(0)
-                .alpha(1.0f);
     }
 
 }

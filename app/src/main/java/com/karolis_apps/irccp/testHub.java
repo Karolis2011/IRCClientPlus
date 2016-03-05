@@ -44,6 +44,7 @@ public class testHub extends AppCompatActivity {
     }
 
     public void Show(View v) {
+        this.SavePrefs(v);
         Intent test = new Intent(this, channelView.class);
         startActivity(test);
     }
