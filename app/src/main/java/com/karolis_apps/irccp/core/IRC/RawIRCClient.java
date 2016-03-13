@@ -11,11 +11,14 @@ import java.io.*;
 import java.net.*;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.*;
 
 import com.karolis_apps.irccp.BuildConfig;
 import com.karolis_apps.irccp.core.IRC.SSL.IgnoreSSLTrustManager;
+import com.karolis_apps.irccp.core.IRC.utils.IRCCallBackRunnable;
 
 /*
 RawIRCClient is a class for handling basic IRC protocol,
@@ -32,12 +35,14 @@ public class RawIRCClient {
     private final boolean sslEnable;
     public Boolean isConnected = false;
     public String currentNick;
+    private final List<IRCCallBackRunnable> callBackRunnableList;
 
     public RawIRCClient(String host, int port, boolean SSL){
         this.returnHandler = null;
         this.port = port;
         this.hostname = host;
         this.sslEnable = SSL;
+        this.callBackRunnableList = new ArrayList<>();
     }
 
     public void Connect(String nickname, String username, String realname) throws IOException, NoSuchAlgorithmException, KeyManagementException{
@@ -95,14 +100,16 @@ public class RawIRCClient {
                     rawSend("NOTICE " + split[0].replace(":", "").split("!")[0] + " \u0001VERSION IRC Client+ version " + BuildConfig.VERSION_NAME + " by Karolis on Android " + Build.VERSION.RELEASE + " SDK: " + Build.VERSION.SDK_INT + "\u0001\r\n");
                 }
             }
-            if(returnHandler != null){
-                IRCPacket p = new IRCPacket(line);
-                Message m = returnHandler.obtainMessage(RawIRCHandler.MessageType.IRC_PACKET.GetValue(), p);
-                m.sendToTarget();
-                IRCPacket p2 = p.TryToPhraseSubType();
-                if(p2 != null){
-                    m = returnHandler.obtainMessage(RawIRCHandler.MessageType.IRC_PACKET.GetValue(), p2);
-                    m.sendToTarget();
+            List<IRCPacket> packetsToDeliver = new ArrayList<>();
+            IRCPacket p = new IRCPacket(line);
+            packetsToDeliver.add(p);
+            IRCPacket p2 = p.TryToPhraseSubType();
+            if(p2 != null){
+                packetsToDeliver.add(p2);
+            }
+            for (IRCPacket pack: packetsToDeliver) {
+                for (IRCCallBackRunnable call: callBackRunnableList) {
+                    call.run(pack);
                 }
             }
             Log.d("IRCOut", line);
@@ -111,11 +118,15 @@ public class RawIRCClient {
             }
         }
     }
-
+    @Deprecated
     public void AttachHandler(Handler handler){
         if(returnHandler == null){
             returnHandler = handler;
         }
+    }
+
+    public void addPacketCallback(IRCCallBackRunnable ircCallBackRunnable){
+        this.callBackRunnableList.add(ircCallBackRunnable);
     }
 
     public void rawSend(String s) throws IOException{

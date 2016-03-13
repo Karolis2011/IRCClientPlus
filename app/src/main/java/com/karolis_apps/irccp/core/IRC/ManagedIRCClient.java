@@ -1,9 +1,10 @@
 package com.karolis_apps.irccp.core.IRC;
 
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Trace;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,10 +17,11 @@ import com.karolis_apps.irccp.BuildConfig;
 import com.karolis_apps.irccp.core.ClientManager;
 import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
 import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
-import com.karolis_apps.irccp.core.IRC.utils.HtmlUtils;
 import com.karolis_apps.irccp.core.IRC.utils.IRCCallBackRunnable;
 import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.IRCName;
 import com.karolis_apps.irccp.exceptions.GeneralException;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 //NOTE: Can be merged with IRCClient in feature
 public class ManagedIRCClient {
@@ -74,7 +76,6 @@ public class ManagedIRCClient {
 
     public void Connect() throws GeneralException{
         unmanagedIRCCLient = new IRCClient(designatedNetwork, designatedNetwork.GetAvailableServer());
-        unmanagedIRCCLient.EnableInternalHandler();
 
         processingThread = new Thread(new Runnable() {
             @Override
@@ -114,22 +115,41 @@ public class ManagedIRCClient {
         if(target.equals(unmanagedIRCCLient.ircCore.currentNick) && (ircPacket.GetType() == IRCPacket.Type.PRIVMSG || ircPacket.GetType() == IRCPacket.Type.NOTICE)) {
             target = IRCName.PhraseName(ircPacket.GetSource()).getProperName();
         }
-        //Log.d("SortAndHandlePacks", "Target: " + target + " CurrentNick: " + unmanagedIRCCLient.ircCore.currentNick);
-        //target = "General"; // Just for test sakes TODO: Remove this line when proper chanel showing will be present
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.beginSection("bufferInit");
+        }
         String buffer = ChannelBuffers.get(target);
         if(buffer == null){
             //Do buffer init stuff, like calling new buffer callbacks
             buffer = "<i>Buffer with <b>" + target +"</b> opened</i><br>";
             ChannelBuffers.put(target, buffer); //We have to but new buffer with data NOW!
-            for (BufferUpdateRunnable call: newbuffercalbacks) {
-                call.run(target);
+            Handler h = new Handler(Looper.getMainLooper());
+            for (final BufferUpdateRunnable call: newbuffercalbacks) {
+                final String tmpTarget = target;
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        call.run(tmpTarget);
+                    }
+                });
             }
+        }
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.endSection();
+            Trace.beginSection("namePhrase");
         }
         if (ircPacket.GetType() != IRCPacket.Type.RAW){
             buffer += "&#60;<b>" + IRCName.PhraseName(ircPacket.GetSource()).getProperName() + "</b>&#62; ";
         }
-        buffer += HtmlUtils.escapeHtml(ircPacket.GetData());
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.endSection();
+            Trace.beginSection("HTML escape");
+        }
+        buffer += StringEscapeUtils.escapeHtml(ircPacket.GetData());
         buffer += "<br>";
+        if(Build.VERSION.SDK_INT >= 18){
+            Trace.endSection();
+        }
         ChannelBuffers.put(target, buffer);
         //Update invoke to just update stuff
         ChannelBufferUpdateTimeouts.put(target, UpdateDelay);

@@ -28,14 +28,18 @@ public class IRCClient {
     private IRCClient(String host, int port, boolean ssl){
         packetCallback = new ArrayList<>();
         ircCore = new RawIRCClient(host, port, ssl);
+        ircCore.addPacketCallback(new IRCCallBackRunnable() {
+            @Override
+            public void run(IRCPacket ircPacket) {
+                for (IRCCallBackRunnable call: packetCallback) {
+                    call.run(ircPacket);
+                }
+            }
+        });
     }
 
     public void Connect() throws IOException, NoSuchAlgorithmException, KeyManagementException{
         this.ircCore.Connect(networkDetails.userDetails.nickname, networkDetails.userDetails.username, networkDetails.userDetails.realname);
-    }
-
-    public void EnableInternalHandler(){
-        ircCore.AttachHandler(GetHandler());
     }
 
     public void addPacketCallback(IRCCallBackRunnable callback){
@@ -43,19 +47,6 @@ public class IRCClient {
     }
     public void clearPacketCallbacks(){
         packetCallback.clear();
-    }
-
-    public void DataReturn(RawIRCHandler.MessageType messageType, Object object){
-        switch (messageType){
-            case UNKNOWN:
-                break;
-            case IRC_PACKET:
-                IRCPacket p = (IRCPacket) object;
-                for(IRCCallBackRunnable r : packetCallback){
-                    r.run(p);
-                }
-                break;
-        }
     }
 
     public void PhraseCommand(String s, String invokingBuffer){
@@ -80,10 +71,6 @@ public class IRCClient {
                 safeRAWSend(s.replaceFirst("/", ""));
 
         }
-    }
-
-    private Handler GetHandler(){
-        return new RawIRCHandler(Looper.getMainLooper(), this);
     }
 
     public boolean safeRAWSend(String rawLine){

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -178,6 +179,12 @@ public class channelView extends AppCompatActivity {
         });*/
     }
 
+    public void Send_FAB(View v){
+        channelBufferFragment currentBuffer = channelPagerAdapter.getItemOriginal(channelPager.getCurrentItem());
+        if(currentBuffer != null){
+            currentBuffer.sendButtonPress();
+        }
+    }
 
     private class ChannelPagerAdapter extends FragmentStatePagerAdapter {
         private final ArrayList<channelBufferFragment> fragments = new ArrayList<>();
@@ -210,6 +217,10 @@ public class channelView extends AppCompatActivity {
             return fragments.get(position);
         }
 
+        public channelBufferFragment getItemOriginal(int position) {
+            return fragments.get(position);
+        }
+
         public void removeBuffer(ViewPager myPager, String bufferName) {
             //myPager.setAdapter(null);
             for(channelBufferFragment cbf : fragments){
@@ -235,7 +246,11 @@ public class channelView extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragments.get(position).getBufferName();
+            String title = fragments.get(position).getBufferName();
+            if(title.equals("!General")){
+                title = "General";
+            }
+            return title;
         }
     }
 }

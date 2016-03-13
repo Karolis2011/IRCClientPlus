@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -41,6 +43,8 @@ public class channelBufferFragment extends Fragment {
     private String myBuffer;
     private View rootView;
     private Context myContext;
+    private ScrollViewExt myScroll;
+    private EditText myInputBox;
 
     public channelBufferFragment() {
         // Required empty public constructor
@@ -90,8 +94,8 @@ public class channelBufferFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_channel_buffer, container, false);
 
-        ScrollViewExt scrollv = (ScrollViewExt) rootView.findViewById(R.id.outputScroller);
-        scrollv.setScrollViewListener(new ScrollViewListener() {
+        myScroll = (ScrollViewExt) rootView.findViewById(R.id.outputScroller);
+        myScroll.setScrollViewListener(new ScrollViewListener() {
             @Override
             public void onScrollChanged(ScrollViewExt scrollView, int x, int y, int oldx, int oldy) {
                 View view = scrollView.getChildAt(scrollView.getChildCount() - 1);
@@ -104,21 +108,13 @@ public class channelBufferFragment extends Fragment {
                 }
             }
         });
-        EditText inputText = (EditText) rootView.findViewById(R.id.inputBox);
-        inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        myInputBox = (EditText) rootView.findViewById(R.id.inputBox);
+        myInputBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean h = false;
-                final String vv = v.getText().toString();
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    Thread t = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ClientManager.getInstance().GetClientByName(myClientName).PhraseInput(vv + "\r\n", myBuffer);
-                        }
-                    });
-                    t.start();
-                    v.setText("");
+                    SendAction();
                     h = true;
                 }
                 return h;
@@ -135,8 +131,8 @@ public class channelBufferFragment extends Fragment {
     }
 
 
-    private void updateBuffer(){
-        if(rootView == null){
+    private void updateBuffer() {
+        if (rootView == null) {
             generalTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -149,13 +145,46 @@ public class channelBufferFragment extends Fragment {
         h.post(new Runnable() {
             @Override
             public void run() {
-                Trace.beginSection("bufferUpdate");
+                if (Build.VERSION.SDK_INT >= 18) {
+                    Trace.beginSection("bufferUpdate");
+                }
                 TextView v = (TextView) rootView.findViewById(R.id.chanOutput);
                 Spanned sp = Html.fromHtml(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
                 v.setText(sp);
-                Trace.endSection();
+                if (Build.VERSION.SDK_INT >= 18) {
+                    Trace.endSection();
+                }
             }
         });
+    }
+
+    public void sendButtonPress(){
+        View view = myScroll.getChildAt(myScroll.getChildCount() - 1);
+        int diff = (view.getBottom() - (myScroll.getHeight() + myScroll.getScrollY()));
+        if(diff <= 5){
+            String vv = myInputBox.getText().toString();
+            if(vv.length() <= 0){
+                myInputBox.requestFocus();
+                InputMethodManager imm = (InputMethodManager) myContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(myInputBox, InputMethodManager.SHOW_IMPLICIT);
+            } else {
+                SendAction();
+            }
+        } else {
+            myScroll.fullScroll(View.FOCUS_DOWN);
+        }
+    }
+
+    private void SendAction(){
+        final String vv = myInputBox.getText().toString();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClientManager.getInstance().GetClientByName(myClientName).PhraseInput(vv + "\r\n", myBuffer);
+            }
+        });
+        t.start();
+        myInputBox.setText("");
     }
 
 }
