@@ -2,15 +2,28 @@ package com.karolis_apps.irccp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.style.ClickableSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.karolis_apps.irccp.core.Android.IRCColour;
 import com.karolis_apps.irccp.core.ClientManager;
 import com.karolis_apps.irccp.core.IRC.ManagedIRCClient;
+import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.Colours;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Arrays;
 
 public class testHub extends AppCompatActivity {
 
@@ -85,6 +98,6 @@ public class testHub extends AppCompatActivity {
         editor.putString(getResources().getString(R.string.server), server);
         editor.putInt(getResources().getString(R.string.pport), port);
         editor.putBoolean(getResources().getString(R.string.ssl), ssl);
-        editor.commit();
+        editor.apply();
     }
 }

@@ -54,21 +54,16 @@ public class IRCClient {
         String params = s.replaceFirst("(\\/)\\w+(\\ )*", "");
         switch (cmd.toLowerCase()){
             case "raw":
-                safeRAWSend(params);
+                safeRAWSend(params + "\r\n");
                 return;
             case "me":
-                safeRAWSend("PRIVMSG " + invokingBuffer + " :ACTION " + params);
+                safeRAWSend("PRIVMSG " + invokingBuffer + " :ACTION " + params + "\r\n");
                 return;
             case "msg":
-                safeRAWSend("PRIVMSG " + params);
-                return;
-            case "html":
-                String bff = ClientManager.getInstance().GetClientByName("Main").ChannelBuffers.get("!General");
-                bff += params;
-                ClientManager.getInstance().GetClientByName("Main").ChannelBuffers.put("!General", bff);
+                safeRAWSend("PRIVMSG " + params + "\r\n");
                 return;
             default:
-                safeRAWSend(s.replaceFirst("/", ""));
+                safeRAWSend(s.replaceFirst("/", "") + "\r\n");
 
         }
     }

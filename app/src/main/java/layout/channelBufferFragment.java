@@ -29,6 +29,7 @@ import java.util.TimerTask;
 import com.karolis_apps.irccp.CustomViews.Interfaces.ScrollViewListener;
 import com.karolis_apps.irccp.CustomViews.ScrollViewExt;
 import com.karolis_apps.irccp.R;
+import com.karolis_apps.irccp.core.Android.IRCColour;
 import com.karolis_apps.irccp.core.ClientManager;
 import com.karolis_apps.irccp.core.IRC.ManagedIRCClient;
 import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
@@ -149,7 +150,8 @@ public class channelBufferFragment extends Fragment {
                     Trace.beginSection("bufferUpdate");
                 }
                 TextView v = (TextView) rootView.findViewById(R.id.chanOutput);
-                Spanned sp = Html.fromHtml(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
+                //Spanned sp = Html.fromHtml(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
+                Spanned sp = IRCColour.fromIRCText(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
                 v.setText(sp);
                 if (Build.VERSION.SDK_INT >= 18) {
                     Trace.endSection();
@@ -159,6 +161,9 @@ public class channelBufferFragment extends Fragment {
     }
 
     public void sendButtonPress(){
+        if(myScroll == null){
+            return;
+        }
         View view = myScroll.getChildAt(myScroll.getChildCount() - 1);
         int diff = (view.getBottom() - (myScroll.getHeight() + myScroll.getScrollY()));
         if(diff <= 5){
@@ -180,7 +185,7 @@ public class channelBufferFragment extends Fragment {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                ClientManager.getInstance().GetClientByName(myClientName).PhraseInput(vv + "\r\n", myBuffer);
+                ClientManager.getInstance().GetClientByName(myClientName).PhraseInput(vv, myBuffer);
             }
         });
         t.start();

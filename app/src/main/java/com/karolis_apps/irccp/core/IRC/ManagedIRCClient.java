@@ -18,6 +18,7 @@ import com.karolis_apps.irccp.core.ClientManager;
 import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
 import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
 import com.karolis_apps.irccp.core.IRC.utils.IRCCallBackRunnable;
+import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.Colours;
 import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.IRCName;
 import com.karolis_apps.irccp.exceptions.GeneralException;
 
@@ -121,7 +122,7 @@ public class ManagedIRCClient {
         String buffer = ChannelBuffers.get(target);
         if(buffer == null){
             //Do buffer init stuff, like calling new buffer callbacks
-            buffer = "<i>Buffer with <b>" + target +"</b> opened</i><br>";
+            buffer = Colours.ITALICS + "Buffer with " + Colours.BOLD + target + Colours.BOLD + " opened" + Colours.ITALICS + "\r\n";
             ChannelBuffers.put(target, buffer); //We have to but new buffer with data NOW!
             Handler h = new Handler(Looper.getMainLooper());
             for (final BufferUpdateRunnable call: newbuffercalbacks) {
@@ -139,14 +140,14 @@ public class ManagedIRCClient {
             Trace.beginSection("namePhrase");
         }
         if (ircPacket.GetType() != IRCPacket.Type.RAW){
-            buffer += "&#60;<b>" + IRCName.PhraseName(ircPacket.GetSource()).getProperName() + "</b>&#62; ";
+            buffer += "<" + Colours.BOLD + IRCName.PhraseName(ircPacket.GetSource()).getProperName()+ Colours.BOLD + "> ";
         }
         if(Build.VERSION.SDK_INT >= 18){
             Trace.endSection();
             Trace.beginSection("HTML escape");
         }
-        buffer += StringEscapeUtils.escapeHtml(ircPacket.GetData());
-        buffer += "<br>";
+        buffer += ircPacket.GetData();
+        buffer += Colours.RESET + "\r\n";
         if(Build.VERSION.SDK_INT >= 18){
             Trace.endSection();
         }
@@ -182,7 +183,7 @@ public class ManagedIRCClient {
             unmanagedIRCCLient.PhraseCommand(input, invokingBuffer);
         } else {
             if(invokingBuffer != "!General") {
-                unmanagedIRCCLient.safeRAWSend("PRIVMSG " + invokingBuffer + " :" + input);
+                unmanagedIRCCLient.safeRAWSend("PRIVMSG " + invokingBuffer + " :" + input + Colours.RESET + "\r\n");
                 IRCPacket phantomPacket = new IRCPacket(IRCPacket.Type.PRIVMSG, input, invokingBuffer, unmanagedIRCCLient.ircCore.currentNick);
                 SortAndHandlePacks(phantomPacket);
 
