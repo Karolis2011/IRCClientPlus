@@ -93,11 +93,18 @@ public class IRCColour {
                 case Colours.COLOUR:
                     colour_state = COLOUR_STATE_FG;
                     colour_state_updated = 0;
+                    char peek = text.charAt(c + 1);
                     if(fg_colour != -1){
                         s.setSpan(new ForegroundColorSpan(ircColourCodeToJava(fg_colour)), fg_colour_start, c - removed_chars, 0);
+                        if(!Character.isDigit(peek) && peek != ','){
+                            fg_colour = -1;
+                        }
                     }
                     if(bg_colour != -1){
                         s.setSpan(new BackgroundColorSpan(ircColourCodeToJava(bg_colour)), bg_colour_start, c - removed_chars, 0);
+                        if(!Character.isDigit(peek) && peek != ','){
+                            fg_colour = -1;
+                        }
                     }
                     removed_chars++;
                     break;
@@ -118,6 +125,8 @@ public class IRCColour {
                         } else if(ch == ',') {
                             colour_state = COLOUR_STATE_BG;
                             removed_chars++;
+                        } else {
+                            colour_state = COLOUR_STATE_NONE;
                         }
                     } else if(colour_state == COLOUR_STATE_BG){
                         if(isDigit){

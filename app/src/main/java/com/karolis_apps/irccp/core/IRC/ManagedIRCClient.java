@@ -140,7 +140,8 @@ public class ManagedIRCClient {
             Trace.beginSection("namePhrase");
         }
         if (ircPacket.GetType() != IRCPacket.Type.RAW){
-            buffer += "<" + Colours.BOLD + IRCName.PhraseName(ircPacket.GetSource()).getProperName()+ Colours.BOLD + "> ";
+            IRCName name = IRCName.PhraseName(ircPacket.GetSource());
+            buffer += "<" + Colours.BOLD + Colours.COLOUR + name.getNickColour() + name.getProperName() + Colours.BOLD + Colours.COLOUR + "> ";
         }
         if(Build.VERSION.SDK_INT >= 18){
             Trace.endSection();

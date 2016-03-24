@@ -4,6 +4,7 @@ package com.karolis_apps.irccp.core.IRC.utils.IRCProtocol;
 import java.util.regex.Pattern;
 
 public class IRCName {
+    public static final int[] nickColours = {4,5,6,10,11,12,13};
     public final String nickname;
     public final String username;
     public final String host;
@@ -28,5 +29,11 @@ public class IRCName {
             return new IRCName(null, null, splitup[0]);
         }
         return new IRCName(splitup[0],splitup[1],splitup[2]);
+    }
+
+    public int getNickColour(){
+        int hash = getProperName().hashCode();
+        hash &= 0x7FFFFFFF;
+        return nickColours[(hash % nickColours.length) - 1];
     }
 }
