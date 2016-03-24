@@ -151,8 +151,12 @@ public class channelBufferFragment extends Fragment {
                 }
                 TextView v = (TextView) rootView.findViewById(R.id.chanOutput);
                 //Spanned sp = Html.fromHtml(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
-                Spanned sp = IRCColour.fromIRCText(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
-                v.setText(sp);
+                try{
+                    Spanned sp = IRCColour.fromIRCText(ClientManager.getInstance().GetClientByName(myClientName).ChannelBuffers.get(myBuffer));
+                    v.setText(sp);
+                } catch (Exception ex){
+                    v.setText("ERROR WHILE RENDERING BUFFER:" + ex.getMessage());
+                }
                 if (Build.VERSION.SDK_INT >= 18) {
                     Trace.endSection();
                 }
