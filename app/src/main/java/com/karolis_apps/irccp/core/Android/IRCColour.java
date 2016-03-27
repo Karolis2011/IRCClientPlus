@@ -103,7 +103,7 @@ public class IRCColour {
                     if(bg_colour != -1){
                         s.setSpan(new BackgroundColorSpan(ircColourCodeToJava(bg_colour)), bg_colour_start, c - removed_chars, 0);
                         if(!Character.isDigit(peek) && peek != ','){
-                            fg_colour = -1;
+                            bg_colour = -1;
                         }
                     }
                     removed_chars++;
