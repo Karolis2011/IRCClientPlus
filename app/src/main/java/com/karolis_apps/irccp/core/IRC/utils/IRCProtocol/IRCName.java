@@ -34,6 +34,6 @@ public class IRCName {
     public int getNickColour(){
         int hash = getProperName().hashCode();
         hash &= 0x7FFFFFFF;
-        return nickColours[(hash % nickColours.length) - 1];
+        return nickColours[(hash % nickColours.length)];
     }
 }
