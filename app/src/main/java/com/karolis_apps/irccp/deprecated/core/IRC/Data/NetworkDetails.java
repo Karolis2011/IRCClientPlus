@@ -1,10 +1,10 @@
-package com.karolis_apps.irccp.core.IRC.Data;
+package com.karolis_apps.irccp.deprecated.core.IRC.Data;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.karolis_apps.irccp.exceptions.GeneralException;
+import com.karolis_apps.irccp.deprecated.exceptions.GeneralException;
 
 public class NetworkDetails {
     public String networkName;

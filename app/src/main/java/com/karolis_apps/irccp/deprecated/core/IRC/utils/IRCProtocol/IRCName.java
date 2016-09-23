@@ -1,7 +1,5 @@
-package com.karolis_apps.irccp.core.IRC.utils.IRCProtocol;
+package com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCProtocol;
 
-
-import java.util.regex.Pattern;
 
 public class IRCName {
     public static final int[] nickColours = {4,5,6,10,11,12,13};

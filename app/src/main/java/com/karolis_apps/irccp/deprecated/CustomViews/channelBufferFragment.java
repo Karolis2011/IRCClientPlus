@@ -1,9 +1,6 @@
-package layout;
+package com.karolis_apps.irccp.deprecated.CustomViews;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +8,6 @@ import android.os.Looper;
 import android.os.Handler;
 import android.os.Trace;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,10 +25,10 @@ import java.util.TimerTask;
 import com.karolis_apps.irccp.CustomViews.Interfaces.ScrollViewListener;
 import com.karolis_apps.irccp.CustomViews.ScrollViewExt;
 import com.karolis_apps.irccp.R;
-import com.karolis_apps.irccp.core.Android.IRCColour;
-import com.karolis_apps.irccp.core.ClientManager;
-import com.karolis_apps.irccp.core.IRC.ManagedIRCClient;
-import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
+import com.karolis_apps.irccp.deprecated.core.Android.IRCColour;
+import com.karolis_apps.irccp.deprecated.core.ClientManager;
+import com.karolis_apps.irccp.deprecated.core.IRC.ManagedIRCClient;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.BufferUpdateRunnable;
 
 /**
  * A simple {@link Fragment} subclass.

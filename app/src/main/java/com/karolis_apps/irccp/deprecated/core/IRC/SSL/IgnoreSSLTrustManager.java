@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.core.IRC.SSL;
+package com.karolis_apps.irccp.deprecated.core.IRC.SSL;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

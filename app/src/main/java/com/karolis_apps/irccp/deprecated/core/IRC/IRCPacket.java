@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.core.IRC;
+package com.karolis_apps.irccp.deprecated.core.IRC;
 
 public class IRCPacket {
     private final Type type;

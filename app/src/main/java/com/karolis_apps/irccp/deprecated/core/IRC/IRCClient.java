@@ -1,8 +1,5 @@
-package com.karolis_apps.irccp.core.IRC;
+package com.karolis_apps.irccp.deprecated.core.IRC;
 
-
-import android.os.Handler;
-import android.os.Looper;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -10,10 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.karolis_apps.irccp.core.ClientManager;
-import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
-import com.karolis_apps.irccp.core.IRC.Data.ServerDetails;
-import com.karolis_apps.irccp.core.IRC.utils.IRCCallBackRunnable;
+import com.karolis_apps.irccp.deprecated.core.IRC.Data.NetworkDetails;
+import com.karolis_apps.irccp.deprecated.core.IRC.Data.ServerDetails;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCCallBackRunnable;
 
 public class IRCClient {
     public final RawIRCClient ircCore;
@@ -57,7 +53,7 @@ public class IRCClient {
                 safeRAWSend(params + "\r\n");
                 return;
             case "me":
-                safeRAWSend("PRIVMSG " + invokingBuffer + " :ACTION " + params + "\r\n");
+                safeRAWSend("PRIVMSG " + invokingBuffer + " :\u0001ACTION " + params + "\u0001\r\n");
                 return;
             case "msg":
                 safeRAWSend("PRIVMSG " + params + "\r\n");

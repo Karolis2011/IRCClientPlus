@@ -1,16 +1,13 @@
-package com.karolis_apps.irccp;
+package com.karolis_apps.irccp.deprecated;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -18,14 +15,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import layout.channelBufferFragment;
-import com.karolis_apps.irccp.core.ClientManager;
-import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
-import com.karolis_apps.irccp.core.IRC.Data.ServerDetails;
-import com.karolis_apps.irccp.core.IRC.Data.UserDetails;
-import com.karolis_apps.irccp.core.IRC.ManagedIRCClient;
-import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
-import com.karolis_apps.irccp.exceptions.GeneralException;
+import com.karolis_apps.irccp.deprecated.CustomViews.channelBufferFragment;
+
+import com.karolis_apps.irccp.R;
+import com.karolis_apps.irccp.deprecated.core.ClientManager;
+import com.karolis_apps.irccp.deprecated.core.IRC.Data.NetworkDetails;
+import com.karolis_apps.irccp.deprecated.core.IRC.Data.ServerDetails;
+import com.karolis_apps.irccp.deprecated.core.IRC.Data.UserDetails;
+import com.karolis_apps.irccp.deprecated.core.IRC.ManagedIRCClient;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.BufferUpdateRunnable;
+import com.karolis_apps.irccp.deprecated.exceptions.GeneralException;
 
 public class channelView extends AppCompatActivity {
     private ViewPager channelPager;

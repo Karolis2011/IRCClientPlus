@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.core.Android;
+package com.karolis_apps.irccp.deprecated.core.Android;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -6,14 +6,10 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 
-import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.Colours;
-
-import java.util.Arrays;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCProtocol.Colours;
 
 public class IRCColour {
     private static final int COLOUR_STATE_NONE = 0;

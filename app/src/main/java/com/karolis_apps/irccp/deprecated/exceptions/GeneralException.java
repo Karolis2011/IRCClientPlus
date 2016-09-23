@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.exceptions;
+package com.karolis_apps.irccp.deprecated.exceptions;
 
 
 public class GeneralException extends Exception {

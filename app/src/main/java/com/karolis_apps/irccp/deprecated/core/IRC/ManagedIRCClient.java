@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.core.IRC;
+package com.karolis_apps.irccp.deprecated.core.IRC;
 
 import android.os.Build;
 import android.os.Handler;
@@ -14,15 +14,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.karolis_apps.irccp.BuildConfig;
-import com.karolis_apps.irccp.core.ClientManager;
-import com.karolis_apps.irccp.core.IRC.Data.NetworkDetails;
-import com.karolis_apps.irccp.core.IRC.utils.BufferUpdateRunnable;
-import com.karolis_apps.irccp.core.IRC.utils.IRCCallBackRunnable;
-import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.Colours;
-import com.karolis_apps.irccp.core.IRC.utils.IRCProtocol.IRCName;
-import com.karolis_apps.irccp.exceptions.GeneralException;
-
-import org.apache.commons.lang.StringEscapeUtils;
+import com.karolis_apps.irccp.deprecated.core.ClientManager;
+import com.karolis_apps.irccp.deprecated.core.IRC.Data.NetworkDetails;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.BufferUpdateRunnable;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCCallBackRunnable;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCProtocol.Colours;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCProtocol.IRCName;
+import com.karolis_apps.irccp.deprecated.exceptions.GeneralException;
 
 //NOTE: Can be merged with IRCClient in feature
 public class ManagedIRCClient {

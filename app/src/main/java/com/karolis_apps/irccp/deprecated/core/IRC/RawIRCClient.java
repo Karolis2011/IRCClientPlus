@@ -1,9 +1,7 @@
-package com.karolis_apps.irccp.core.IRC;
+package com.karolis_apps.irccp.deprecated.core.IRC;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Message;
 import android.os.Trace;
 import android.util.Log;
 
@@ -17,8 +15,8 @@ import java.util.List;
 import javax.net.ssl.*;
 
 import com.karolis_apps.irccp.BuildConfig;
-import com.karolis_apps.irccp.core.IRC.SSL.IgnoreSSLTrustManager;
-import com.karolis_apps.irccp.core.IRC.utils.IRCCallBackRunnable;
+import com.karolis_apps.irccp.deprecated.core.IRC.SSL.IgnoreSSLTrustManager;
+import com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCCallBackRunnable;
 
 /*
 RawIRCClient is a class for handling basic IRC protocol,
@@ -134,7 +132,7 @@ public class RawIRCClient {
         outC.write(s);
         outC.flush();
         if(s.toLowerCase().startsWith("nick")){
-            currentNick = s.substring(4);
+            currentNick = s.substring(4).replace("\r\n", "").trim();
         }
     }
 

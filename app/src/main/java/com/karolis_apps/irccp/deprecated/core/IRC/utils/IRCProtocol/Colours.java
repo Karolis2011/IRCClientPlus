@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.core.IRC.utils.IRCProtocol;
+package com.karolis_apps.irccp.deprecated.core.IRC.utils.IRCProtocol;
 
 public class Colours {
     public static final char BOLD = '\u0002';

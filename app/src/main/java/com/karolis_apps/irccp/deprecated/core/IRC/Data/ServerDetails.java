@@ -1,4 +1,4 @@
-package com.karolis_apps.irccp.core.IRC.Data;
+package com.karolis_apps.irccp.deprecated.core.IRC.Data;
 
 
 import java.net.InetAddress;
