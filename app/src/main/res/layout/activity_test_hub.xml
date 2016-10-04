@@ -8,6 +8,7 @@
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
     tools:context=".deprecated.testHub">
+
     <com.karolis_apps.irccp.CustomViews.ScrollViewExt
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:text="Connect / Show"
                 android:id="@+id/showBtn"
-                android:onClick="Show"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
@@ -36,8 +36,7 @@
                 android:id="@+id/disBtn"
                 android:layout_below="@+id/showBtn"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:onClick="Disconnect" />
+                android:layout_alignParentEnd="true" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -61,8 +60,7 @@
                     android:layout_below="@+id/nickTextView"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignRight="@+id/disBtn"
-                    android:layout_alignEnd="@+id/disBtn" />
+                    android:layout_alignRight="@+id/disBtn" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,10 +76,9 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/userTextBox"
                     android:layout_below="@+id/userTextView"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignRight="@+id/nickTextBox"
-                    android:layout_alignEnd="@+id/nickTextBox" />
+                    android:layout_alignParentLeft="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -131,7 +128,17 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+        <!--<Button-->
+            <!--android:text="Switch To new test hub"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/ntesthub"-->
+            <!--android:elevation="4dp"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_width="wrap_content" />-->
+
+    </RelativeLayout>
     </com.karolis_apps.irccp.CustomViews.ScrollViewExt>
 
 

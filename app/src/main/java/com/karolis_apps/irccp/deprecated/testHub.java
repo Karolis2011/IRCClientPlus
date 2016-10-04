@@ -6,12 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.karolis_apps.irccp.R;
 import com.karolis_apps.irccp.deprecated.core.ClientManager;
 import com.karolis_apps.irccp.deprecated.core.IRC.ManagedIRCClient;
+import com.karolis_apps.irccp.newTestHub;
 
 public class testHub extends AppCompatActivity {
 
@@ -41,6 +43,28 @@ public class testHub extends AppCompatActivity {
             ti.setText(String.valueOf(port));
             CheckBox ch = (CheckBox) findViewById(R.id.sslCheckBox);
             ch.setChecked(sharedPref.getBoolean(getResources().getString(R.string.ssl), default_ssl));
+
+            final Button showBtn = (Button) findViewById(R.id.showBtn);
+            showBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Show(v);
+                }
+            });
+            final Button disBtn = (Button) findViewById(R.id.disBtn);
+            disBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Disconnect(v);
+                }
+            });
+//            final Button ntesthub = (Button) findViewById(R.id.ntesthub);
+//            ntesthub.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    OpenNewTH(v);
+//                }
+//            });
         }
     }
 
@@ -87,5 +111,10 @@ public class testHub extends AppCompatActivity {
         editor.putInt(getResources().getString(R.string.pport), port);
         editor.putBoolean(getResources().getString(R.string.ssl), ssl);
         editor.apply();
+    }
+
+    public void OpenNewTH(View v) {
+        Intent test = new Intent(this, newTestHub.class);
+        startActivity(test);
     }
 }
