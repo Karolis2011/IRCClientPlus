@@ -30,7 +30,7 @@ public class channelView extends AppCompatActivity {
     private ViewPager channelPager;
     private ChannelPagerAdapter channelPagerAdapter;
     private ManagedIRCClient ircClient;
-    private TabLayout channelPagerTabLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +40,7 @@ public class channelView extends AppCompatActivity {
         channelPagerAdapter = new ChannelPagerAdapter(getSupportFragmentManager(), channelPager);
         channelPager.setAdapter(channelPagerAdapter);
 
-        channelPagerTabLayout = (TabLayout) findViewById(R.id.channelPagerTabLayout);
+        TabLayout channelPagerTabLayout = (TabLayout) findViewById(R.id.channelPagerTabLayout);
         channelPagerTabLayout.setupWithViewPager(channelPager);
 
         ircClient = ClientManager.getInstance().GetClientByName("Main");

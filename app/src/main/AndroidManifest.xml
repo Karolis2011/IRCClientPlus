@@ -20,7 +20,10 @@
         </activity>
         <activity android:name=".deprecated.channelView" />
         <activity android:name=".newTestHub" />
-        <activity android:name=".ConnectionManager"></activity>
+        <activity android:name=".ConnectionManager" />
+        <activity
+            android:name=".IRCConfigSettings"
+            android:label="@string/title_activity_ircconfig_settings"></activity>
     </application>
 
 </manifest>

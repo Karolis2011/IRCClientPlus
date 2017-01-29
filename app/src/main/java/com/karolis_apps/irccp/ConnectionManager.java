@@ -10,4 +10,8 @@ public class ConnectionManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection_manager);
     }
+
+    public int getPrefIdForConfId(String id) {
+        return 0;
+    }
 }

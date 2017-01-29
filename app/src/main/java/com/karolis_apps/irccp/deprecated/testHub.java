@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.karolis_apps.irccp.R;
 import com.karolis_apps.irccp.deprecated.core.ClientManager;
@@ -16,6 +17,8 @@ import com.karolis_apps.irccp.deprecated.core.IRC.ManagedIRCClient;
 import com.karolis_apps.irccp.newTestHub;
 
 public class testHub extends AppCompatActivity {
+
+    int NTHclicks = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +61,16 @@ public class testHub extends AppCompatActivity {
                     Disconnect(v);
                 }
             });
-//            final Button ntesthub = (Button) findViewById(R.id.ntesthub);
-//            ntesthub.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    OpenNewTH(v);
-//                }
-//            });
+            final ImageView irccpImg = (ImageView) findViewById(R.id.irccpIcon);
+            irccpImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NTHclicks++;
+                    if (NTHclicks > 6) {
+                        OpenNewTH(v);
+                    }
+                }
+            });
         }
     }
 

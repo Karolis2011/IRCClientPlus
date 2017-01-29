@@ -181,7 +181,7 @@ public class ManagedIRCClient {
         if(input.startsWith("/")){
             unmanagedIRCCLient.PhraseCommand(input, invokingBuffer);
         } else {
-            if(invokingBuffer != "!General") {
+            if(!invokingBuffer.equals("!General")) {
                 unmanagedIRCCLient.safeRAWSend("PRIVMSG " + invokingBuffer + " :" + input + Colours.RESET + "\r\n");
                 IRCPacket phantomPacket = new IRCPacket(IRCPacket.Type.PRIVMSG, input, invokingBuffer, unmanagedIRCCLient.ircCore.currentNick);
                 SortAndHandlePacks(phantomPacket);

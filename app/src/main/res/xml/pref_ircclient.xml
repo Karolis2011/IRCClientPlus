@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen
+        android:key="button_voicemail_category_key"
+        android:title="Voice mail"
+        android:persistent="false">
+
+        <EditTextPreference
+            android:defaultValue="Default value"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Edit text preference"
+            android:key="edit_text_preference_1" />
+
+    </PreferenceScreen>
+    <CheckBoxPreference
+        android:key="pref_sync"
+        android:title="Sync"
+        android:summary="Sum"
+        android:defaultValue="true"
+        android:persistent="false" />
+    <PreferenceCategory android:title="Preference category">
+
+        <EditTextPreference
+            android:defaultValue="Default value"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Edit text preference"
+            android:key="edit_text_preference_1" />
+        <RingtonePreference
+            android:defaultValue=""
+            android:title="Ringtone preference"
+            android:key="ringtone_preference_1" />
+    </PreferenceCategory>
+</PreferenceScreen>
